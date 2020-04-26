@@ -43,7 +43,27 @@
     </div>
 
     <div class="point-viewer">
-        <span>Two</span>
+        <div class="table-container">
+            <table mat-table [dataSource]="pointSource" class="mat-elevation-z8">
+
+                <ng-container matColumnDef="x">
+                    <th mat-header-cell *matHeaderCellDef>X coordinates</th>
+                    <td mat-cell *matCellDef="let element"> {{element.x}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="y">
+                    <th mat-header-cell *matHeaderCellDef>Y coordinates</th>
+                    <td mat-cell *matCellDef="let element"> {{element.y}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+        <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 50]"
+                       [showFirstLastButtons]="true" [length]="totalSize"
+                       [pageIndex]="currentPage" (page)="handlePage($event)">
+        </mat-paginator>
     </div>
 
     <div class="point-list-manager">
