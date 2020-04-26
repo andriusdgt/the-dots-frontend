@@ -1,5 +1,69 @@
-<div style="text-align:center">
-  <h1>
-    Hello World!
-  </h1>
+<div class="root-container">
+
+    <div class="control-panel">
+        <span>Points</span>
+
+        <form class="add-point-form" (ngSubmit)="newPointForm.valid && addPoint()" [formGroup]="newPointForm">
+            <div class="coordinates">
+                <mat-form-field>
+                    <mat-label>X coordinate</mat-label>
+                    <input matInput formControlName="x" type="number" required/>
+                    <mat-error *ngIf="newPointForm.controls.x.errors?.required">
+                        Value required
+                    </mat-error>
+                    <mat-error *ngIf="newPointForm.controls.x.errors?.min">
+                        Can't be less than -10000
+                    </mat-error>
+                    <mat-error *ngIf="newPointForm.controls.x.errors?.max">
+                        Can't be more than 10000
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Y coordinate</mat-label>
+                    <input matInput formControlName="y" type="number" required/>
+                    <mat-error *ngIf="newPointForm.controls.y.errors?.required">
+                        Value required
+                    </mat-error>
+                    <mat-error *ngIf="newPointForm.controls.y.errors?.min">
+                        Can't be less than -10000
+                    </mat-error>
+                    <mat-error *ngIf="newPointForm.controls.y.errors?.max">
+                        Can't be more than 10000
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <button mat-raised-button color="primary" type="submit">Add</button>
+
+        </form>
+
+        <button mat-raised-button color="warn" (click)="deletePoint()">Delete point</button>
+
+    </div>
+
+    <div class="point-viewer">
+        <span>Two</span>
+    </div>
+
+    <div class="point-list-manager">
+        <span>Point list</span>
+        <div class="options">
+            <button mat-raised-button color="primary" (click)="upload()">Upload</button>
+            <button mat-raised-button color="primary" (click)="download()">Download</button>
+            <button mat-raised-button color="warn" (click)="clearPoints()">Clear points</button>
+            <button mat-raised-button color="primary" (click)="findSquares()">Find squares</button>
+        </div>
+
+        <div class="options">
+            <button mat-raised-button color="primary" (click)="createList()">Create list</button>
+            <button mat-raised-button color="primary" (click)="renameList()">Rename list</button>
+            <button mat-raised-button color="warn" (click)="deleteList()">Delete list</button>
+        </div>
+
+        <div>
+
+        </div>
+    </div>
+
 </div>
