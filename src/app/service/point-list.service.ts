@@ -11,7 +11,7 @@ export class PointListService {
     constructor(private backendHttpService: BackendHttpService) {
     }
 
-    getPointListIds(): Promise<Array<PointList>> {
+    getPointLists(): Promise<Array<PointList>> {
         return this.backendHttpService.get<Array<PointList>>(POINT_LIST_PATH)
     }
 

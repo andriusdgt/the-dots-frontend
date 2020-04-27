@@ -27,7 +27,7 @@ export class AppComponent {
     displayedColumns: string[] = ['x', 'y'];
 
     constructor(private formBuilder: FormBuilder, private pointService: PointService, private pointListService: PointListService) {
-        this.pointListService.getPointListIds().then(
+        this.pointListService.getPointLists().then(
             pointListIds => {
                 if (pointListIds.length > 0) {
                     this.pointListId = pointListIds[0].id;
