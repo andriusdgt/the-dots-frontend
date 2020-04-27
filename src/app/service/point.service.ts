@@ -14,8 +14,8 @@ export class PointService {
         this.backendHttpService.put<Point>(POINT_PATH, point)
     }
 
-    getAllPoints(listId: string, pageIndex: number, pageSize: number): Promise<any> {
-        return this.backendHttpService.get<any[]>(POINT_PATH + `/list-id/${listId}/page-index/${pageIndex}/page-size/${pageSize}`)
+    getAllPoints(listId: string, pageIndex: number, pageSize: number): Promise<Array<Point>> {
+        return this.backendHttpService.get<Array<Point>>(POINT_PATH + `/list-id/${listId}/page-index/${pageIndex}/page-size/${pageSize}`)
     }
 
     getPointCount(listId: string): Promise<number> {
