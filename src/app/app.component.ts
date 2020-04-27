@@ -100,8 +100,13 @@ export class AppComponent {
         this.updatePoints()
     }
 
-    upload() {
-
+    upload(event) {
+        this.pointListService
+            .uploadPointList(event.target.files[0], this.selectedPointList.id)
+            .then(() => {
+                this.setPointLists()
+                this.updatePoints()
+            })
     }
 
     download() {
