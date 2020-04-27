@@ -15,7 +15,11 @@ export class PointService {
     }
 
     deletePoint(id: string){
-        this.backendHttpService.delete<Point>(POINT_PATH + '/' + id)
+        this.backendHttpService.delete<void>(POINT_PATH + '/' + id)
+    }
+
+    deletePoints(listId: string){
+        this.backendHttpService.delete<void>(POINT_PATH + `/list-id/${listId}`)
     }
 
     getAllPoints(listId: string, pageIndex: number, pageSize: number): Promise<Array<Point>> {

@@ -109,7 +109,8 @@ export class AppComponent {
     }
 
     clearPoints() {
-
+        this.pointService.deletePoints(this.selectedPointList.id)
+        this.updatePoints()
     }
 
     findSquares() {
@@ -129,10 +130,15 @@ export class AppComponent {
         })
 
         dialogRef.afterClosed().subscribe((newPointListName?: string) => {
+            let newPointList = new PointList(this.selectedPointList.id, newPointListName)
             if (newPointListName)
                 this.pointListService
-                    .updatePointList(new PointList(this.selectedPointList.id, newPointListName))
-                    .then(() => this.setPointLists())
+                    .updatePointList(newPointList)
+                    .then(() => {
+                            this.setPointLists()
+                            this.selectPointList(newPointList)
+                        }
+                    )
         })
     }
 
