@@ -1,9 +1,10 @@
 import { flatten } from '@angular/compiler'
 import { Component } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
-import { PageEvent } from '@angular/material'
+import { MatDialog, PageEvent } from '@angular/material'
 import { Point } from './point'
 import { PointList } from './point-list'
+import { RenamePointListDialog } from './rename-point-list-dialog.component'
 import { PointListService } from './service/point-list.service'
 import { PointService } from './service/point.service'
 
@@ -27,7 +28,7 @@ export class AppComponent {
     selectedPointId: string
 
     pointLists: Array<PointList>
-    selectedPointListId: string
+    selectedPointList: PointList
 
     squaresPageIndex = 0
     squaresPageSize = 5
@@ -37,14 +38,19 @@ export class AppComponent {
     displayedColumns: string[] = ['x', 'y']
     private pointSquares: Array<Point>
 
-    constructor(private formBuilder: FormBuilder, private pointService: PointService, private pointListService: PointListService) {
+    constructor(
+        private formBuilder: FormBuilder,
+        private dialog: MatDialog,
+        private pointService: PointService,
+        private pointListService: PointListService
+    ) {
         this.setPointLists(this.setInitPoints())
     }
 
     private setInitPoints() {
         return (pointLists: Array<PointList>) => {
             if (pointLists.length > 0) {
-                this.selectedPointListId = pointLists[0].id
+                this.selectedPointList = pointLists[0]
                 this.updatePoints()
             }
         }
@@ -62,7 +68,7 @@ export class AppComponent {
     }
 
     addPoint() {
-        this.pointService.addPoint(new Point(null, this.newPointForm.value.x, this.newPointForm.value.y, this.selectedPointListId))
+        this.pointService.addPoint(new Point(null, this.newPointForm.value.x, this.newPointForm.value.y, this.selectedPointList.id))
         this.updatePoints()
     }
 
@@ -70,7 +76,7 @@ export class AppComponent {
         this.pointPageIndex = event.pageIndex
         this.pointPageSize = event.pageSize
         this.pointService
-            .getAllPoints(this.selectedPointListId, event.pageIndex, event.pageSize)
+            .getAllPoints(this.selectedPointList.id, event.pageIndex, event.pageSize)
             .then(points => this.pointSource = points)
     }
 
@@ -85,7 +91,7 @@ export class AppComponent {
     }
 
     selectPointList(pointList: PointList) {
-        this.selectedPointListId = pointList.id
+        this.selectedPointList = pointList
         this.updatePoints()
     }
 
@@ -111,25 +117,42 @@ export class AppComponent {
     }
 
     createList() {
-
+        this.pointListService.createPointList().then(
+            () => this.setPointLists()
+        )
     }
 
     renameList() {
+        const dialogRef = this.dialog.open(RenamePointListDialog, {
+            width: '350px',
+            data: this.selectedPointList.name
+        })
 
+        dialogRef.afterClosed().subscribe((newPointListName?: string) => {
+            if (newPointListName)
+                this.pointListService
+                    .updatePointList(new PointList(this.selectedPointList.id, newPointListName))
+                    .then(() => this.setPointLists())
+        })
     }
 
     deleteList() {
-
+        this.pointListService.deletePointList(this.selectedPointList.id).then(
+            () => {
+                this.setPointLists()
+                this.updatePoints()
+            }
+        )
     }
 
     private updatePoints() {
-        this.pointService.getPointCount(this.selectedPointListId).then(pointCount => this.pointCount = pointCount)
+        this.pointService.getPointCount(this.selectedPointList.id).then(pointCount => this.pointCount = pointCount)
         this.handlePointPage(this.createPointPageEvent())
     }
 
     private updatePointSquares() {
         this.pointListService
-            .getPointListSquares(this.selectedPointListId)
+            .getPointListSquares(this.selectedPointList.id)
             .then(squares => {
                 this.pointSquares = flatten(squares)
                 this.squarePointsCount = this.pointSquares.length
