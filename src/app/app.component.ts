@@ -105,7 +105,7 @@ export class AppComponent {
     }
 
     download() {
-
+        this.pointListService.downloadPointList(this.selectedPointList.id)
     }
 
     clearPoints() {
