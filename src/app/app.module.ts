@@ -2,7 +2,14 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule, MatFormFieldModule, MatInputModule, MatPaginatorModule, MatTableModule } from '@angular/material';
+import {
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatRippleModule,
+    MatTableModule
+} from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -25,6 +32,7 @@ import { PointService } from './service/point.service';
         MatFormFieldModule,
         MatInputModule,
         MatPaginatorModule,
+        MatRippleModule,
         MatTableModule,
         ReactiveFormsModule
     ],

@@ -22,6 +22,7 @@ export class AppComponent {
     pageSize = 5;
     totalSize = 5;
     pointSource: any;
+    selectedPointId: string;
     pointListId: string;
 
     displayedColumns: string[] = ['x', 'y'];
@@ -38,7 +39,7 @@ export class AppComponent {
     }
 
     addPoint() {
-        this.pointService.addPoint(new Point(this.newPointForm.value.x, this.newPointForm.value.y, 1000));
+        this.pointService.addPoint(new Point(null, this.newPointForm.value.x, this.newPointForm.value.y, this.pointListId));
         this.updatePointList();
     }
 
@@ -50,8 +51,13 @@ export class AppComponent {
             .then(points => this.pointSource = points);
     }
 
-    deletePoint() {
+    selectPoint(point: Point) {
+        this.selectedPointId = point.id
+    }
 
+    deletePoint() {
+        this.pointService.deletePoint(this.selectedPointId)
+        this.updatePointList();
     }
 
     upload() {

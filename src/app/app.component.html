@@ -44,20 +44,22 @@
 
     <div class="point-viewer">
         <div class="table-container">
-            <table mat-table [dataSource]="pointSource" class="mat-elevation-z8">
+            <table mat-table [dataSource]="pointSource">
 
                 <ng-container matColumnDef="x">
-                    <th mat-header-cell *matHeaderCellDef>X coordinates</th>
-                    <td mat-cell *matCellDef="let element"> {{element.x}} </td>
+                    <mat-header-cell *matHeaderCellDef>X coordinates</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.x}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="y">
-                    <th mat-header-cell *matHeaderCellDef>Y coordinates</th>
-                    <td mat-cell *matCellDef="let element"> {{element.y}} </td>
+                    <mat-header-cell *matHeaderCellDef>Y coordinates</mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.y}} </mat-cell>
                 </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="point-row"
+                         (click)="selectPoint(row)">
+                </mat-row>
             </table>
         </div>
         <mat-paginator [pageSize]="pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="[5, 10, 20, 50]"

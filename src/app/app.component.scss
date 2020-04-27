@@ -40,6 +40,10 @@
 
       table {
         width: 100%;
+
+        .point-row {
+          cursor: pointer;
+        }
       }
     }
 

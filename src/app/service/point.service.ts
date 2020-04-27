@@ -14,6 +14,10 @@ export class PointService {
         this.backendHttpService.put<Point>(POINT_PATH, point)
     }
 
+    deletePoint(id: string){
+        this.backendHttpService.delete<Point>(POINT_PATH + '/' + id)
+    }
+
     getAllPoints(listId: string, pageIndex: number, pageSize: number): Promise<Array<Point>> {
         return this.backendHttpService.get<Array<Point>>(POINT_PATH + `/list-id/${listId}/page-index/${pageIndex}/page-size/${pageSize}`)
     }
