@@ -38,8 +38,38 @@
 
         </form>
 
-        <button mat-raised-button color="warn" (click)="deletePoint()">Delete point</button>
+        <button mat-raised-button color="warn" (click)="deletePoint()">Delete selected point</button>
 
+        <div class="point-list-squares">
+            <span>Squares</span>
+
+            <div class="options">
+                <button mat-raised-button color="primary" (click)="findSquares()">Find squares</button>
+            </div>
+
+            <div class="table-container">
+                <table mat-table [dataSource]="pointSquareSource">
+
+                    <ng-container matColumnDef="x">
+                        <mat-header-cell *matHeaderCellDef>X coordinates</mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.x}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="y">
+                        <mat-header-cell *matHeaderCellDef>Y coordinates</mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.y}} </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </table>
+            </div>
+            <mat-paginator [pageSize]="squaresPageSize" [pageIndex]="squaresPageIndex"
+                           [pageSizeOptions]="[5, 10, 20, 50]"
+                           [showFirstLastButtons]="true" [length]="squarePointsCount"
+                           (page)="handlePointSquaresPage($event)">
+            </mat-paginator>
+        </div>
     </div>
 
     <div class="point-viewer">
@@ -62,8 +92,8 @@
                 </mat-row>
             </table>
         </div>
-        <mat-paginator [pageSize]="pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="[5, 10, 20, 50]"
-                       [showFirstLastButtons]="true" [length]="totalSize" (page)="handlePage($event)">
+        <mat-paginator [pageSize]="pointPageSize" [pageIndex]="pointPageIndex" [pageSizeOptions]="[5, 10, 20, 50]"
+                       [showFirstLastButtons]="true" [length]="pointCount" (page)="handlePointPage($event)">
         </mat-paginator>
     </div>
 
@@ -73,7 +103,6 @@
             <button mat-raised-button color="primary" (click)="upload()">Upload</button>
             <button mat-raised-button color="primary" (click)="download()">Download</button>
             <button mat-raised-button color="warn" (click)="clearPoints()">Clear points</button>
-            <button mat-raised-button color="primary" (click)="findSquares()">Find squares</button>
         </div>
 
         <div class="options">
@@ -82,9 +111,12 @@
             <button mat-raised-button color="warn" (click)="deleteList()">Delete list</button>
         </div>
 
-        <div>
-
+        <div class="point-lists">
+            <button mat-button *ngFor="let pointList of pointLists" (click)="selectPointList(pointList)">
+                {{pointList.name}}
+            </button>
         </div>
+
     </div>
 
 </div>

@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { PageEvent } from '@angular/material';
-import { Point } from './point';
-import { PointListService } from './service/point-list.service';
-import { PointService } from './service/point.service';
+import { flatten } from '@angular/compiler'
+import { Component } from '@angular/core'
+import { FormBuilder, Validators } from '@angular/forms'
+import { PageEvent } from '@angular/material'
+import { Point } from './point'
+import { PointList } from './point-list'
+import { PointListService } from './service/point-list.service'
+import { PointService } from './service/point.service'
 
 @Component({
     selector: 'app-root',
@@ -11,53 +13,85 @@ import { PointService } from './service/point.service';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-    title = 'The Dots';
+    title = 'The Dots'
 
     newPointForm = this.formBuilder.group({
         x: ['', [Validators.required, Validators.min(-10000), Validators.max(10000)]],
         y: ['', [Validators.required, Validators.min(-10000), Validators.max(10000)]]
-    });
+    })
 
-    pageIndex = 0;
-    pageSize = 5;
-    totalSize = 5;
-    pointSource: any;
-    selectedPointId: string;
-    pointListId: string;
+    pointPageIndex = 0
+    pointPageSize = 5
+    pointCount = 5
+    pointSource: Array<Point>
+    selectedPointId: string
 
-    displayedColumns: string[] = ['x', 'y'];
+    pointLists: Array<PointList>
+    selectedPointListId: string
+
+    squaresPageIndex = 0
+    squaresPageSize = 5
+    squarePointsCount = 5
+    pointSquareSource: Array<Point>
+
+    displayedColumns: string[] = ['x', 'y']
+    private pointSquares: Array<Point>
 
     constructor(private formBuilder: FormBuilder, private pointService: PointService, private pointListService: PointListService) {
-        this.pointListService.getPointLists().then(
-            pointListIds => {
-                if (pointListIds.length > 0) {
-                    this.pointListId = pointListIds[0].id;
-                    this.updatePointList();
-                }
+        this.setPointLists(this.setInitPoints())
+    }
+
+    private setInitPoints() {
+        return (pointLists: Array<PointList>) => {
+            if (pointLists.length > 0) {
+                this.selectedPointListId = pointLists[0].id
+                this.updatePoints()
             }
-        );
+        }
+    }
+
+    private setPointLists(callback: (pointLists: Array<PointList>) => void = () => {}) {
+        this.pointListService
+            .getPointLists()
+            .then(
+                pointLists => {
+                    this.pointLists = pointLists
+                    callback(pointLists)
+                }
+            )
     }
 
     addPoint() {
-        this.pointService.addPoint(new Point(null, this.newPointForm.value.x, this.newPointForm.value.y, this.pointListId));
-        this.updatePointList();
+        this.pointService.addPoint(new Point(null, this.newPointForm.value.x, this.newPointForm.value.y, this.selectedPointListId))
+        this.updatePoints()
     }
 
-    handlePage(event: PageEvent) {
-        this.pageIndex = event.pageIndex;
-        this.pageSize = event.pageSize;
+    handlePointPage(event: PageEvent) {
+        this.pointPageIndex = event.pageIndex
+        this.pointPageSize = event.pageSize
         this.pointService
-            .getAllPoints(this.pointListId, event.pageIndex, event.pageSize)
-            .then(points => this.pointSource = points);
+            .getAllPoints(this.selectedPointListId, event.pageIndex, event.pageSize)
+            .then(points => this.pointSource = points)
+    }
+
+    handlePointSquaresPage(event: PageEvent) {
+        this.squaresPageIndex = event.pageIndex
+        this.squaresPageSize = event.pageSize
+        this.pointSquareSource = this.pointSquares.slice(event.pageIndex * event.pageSize, (event.pageIndex + 1) * event.pageSize)
     }
 
     selectPoint(point: Point) {
         this.selectedPointId = point.id
     }
 
+    selectPointList(pointList: PointList) {
+        this.selectedPointListId = pointList.id
+        this.updatePoints()
+    }
+
     deletePoint() {
         this.pointService.deletePoint(this.selectedPointId)
-        this.updatePointList();
+        this.updatePoints()
     }
 
     upload() {
@@ -73,7 +107,7 @@ export class AppComponent {
     }
 
     findSquares() {
-
+        this.updatePointSquares()
     }
 
     createList() {
@@ -88,16 +122,35 @@ export class AppComponent {
 
     }
 
-    private updatePointList() {
-        this.pointService.getPointCount(this.pointListId).then(pointCount => this.totalSize = pointCount);
-        this.handlePage(this.createPageEvent());
+    private updatePoints() {
+        this.pointService.getPointCount(this.selectedPointListId).then(pointCount => this.pointCount = pointCount)
+        this.handlePointPage(this.createPointPageEvent())
     }
 
-    private createPageEvent(): PageEvent {
-        return {
-            pageIndex: this.pageIndex,
-            pageSize: this.pageSize,
-            length: this.totalSize
-        };
+    private updatePointSquares() {
+        this.pointListService
+            .getPointListSquares(this.selectedPointListId)
+            .then(squares => {
+                this.pointSquares = flatten(squares)
+                this.squarePointsCount = this.pointSquares.length
+                this.handlePointSquaresPage(this.createPointSquarePageEvent())
+            })
     }
+
+    private createPointPageEvent(): PageEvent {
+        return {
+            pageIndex: this.pointPageIndex,
+            pageSize: this.pointPageSize,
+            length: this.pointCount
+        }
+    }
+
+    private createPointSquarePageEvent(): PageEvent {
+        return {
+            pageIndex: this.squaresPageIndex,
+            pageSize: this.squaresPageSize,
+            length: this.squarePointsCount
+        }
+    }
+
 }
