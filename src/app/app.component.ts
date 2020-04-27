@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material';
+import { Point } from './point';
 import { PointService } from './service/point.service';
 
 @Component({
@@ -16,23 +17,33 @@ export class AppComponent {
         y: ['', [Validators.required, Validators.min(-10000), Validators.max(10000)]]
     });
 
-    pageSize = 10;
-    currentPage = 0;
-    totalSize = 20;
+    pageIndex = 0;
+    pageSize = 5;
+    totalSize = 5;
     pointSource: any;
     displayedColumns: string[] = ['x', 'y'];
 
     constructor(private formBuilder: FormBuilder, private pointService: PointService) {
+        this.pointService.getPointCount().then(pointCount => this.totalSize = pointCount);
+        this.handlePage(this.createPageEvent());
+    }
+
+    private createPageEvent(): PageEvent {
+        return {
+            pageIndex: this.pageIndex,
+            previousPageIndex: 0,
+            pageSize: this.pageSize,
+            length: this.totalSize
+        };
     }
 
     addPoint() {
-        console.log(this.newPointForm.value.x);
-        console.log(this.newPointForm.value.y);
+        this.pointService.addPoint(new Point(this.newPointForm.value.x, this.newPointForm.value.y, 1000))
     }
 
     handlePage(event: PageEvent) {
         this.pointService
-            .getAllPoints(event.pageIndex)
+            .getAllPoints(event.pageIndex, event.pageSize)
             .then(points => this.pointSource = points);
     }
 
