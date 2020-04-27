@@ -14,13 +14,11 @@ export class PointService {
         this.backendHttpService.put<Point>(POINT_PATH, point)
     }
 
-    getAllPoints(pageIndex: number, pageSize: number): Promise<any> {
-        const listId: String = '1000';
+    getAllPoints(listId: string, pageIndex: number, pageSize: number): Promise<any> {
         return this.backendHttpService.get<any[]>(POINT_PATH + `/list-id/${listId}/page-index/${pageIndex}/page-size/${pageSize}`)
     }
 
-    getPointCount(): Promise<number> {
-        const listId: String = '1000';
+    getPointCount(listId: string): Promise<number> {
         return this.backendHttpService.get<number>(POINT_PATH + `/list-id/${listId}/count`)
     }
 

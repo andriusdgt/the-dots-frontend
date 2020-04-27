@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material';
 import { Point } from './point';
+import { PointListService } from './service/point-list.service';
 import { PointService } from './service/point.service';
 
 @Component({
@@ -21,22 +22,31 @@ export class AppComponent {
     pageSize = 5;
     totalSize = 5;
     pointSource: any;
+    pointListId: string;
+
     displayedColumns: string[] = ['x', 'y'];
 
-    constructor(private formBuilder: FormBuilder, private pointService: PointService) {
-        this.updatePointList();
+    constructor(private formBuilder: FormBuilder, private pointService: PointService, private pointListService: PointListService) {
+        this.pointListService.getPointListIds().then(
+            pointListIds => {
+                if (pointListIds.length > 0) {
+                    this.pointListId = pointListIds[0].id;
+                    this.updatePointList();
+                }
+            }
+        );
     }
 
     addPoint() {
-        this.pointService.addPoint(new Point(this.newPointForm.value.x, this.newPointForm.value.y, 1000))
+        this.pointService.addPoint(new Point(this.newPointForm.value.x, this.newPointForm.value.y, 1000));
         this.updatePointList();
     }
 
     handlePage(event: PageEvent) {
-        this.pageIndex = event.pageIndex
-        this.pageSize = event.pageSize
+        this.pageIndex = event.pageIndex;
+        this.pageSize = event.pageSize;
         this.pointService
-            .getAllPoints(event.pageIndex, event.pageSize)
+            .getAllPoints(this.pointListId, event.pageIndex, event.pageSize)
             .then(points => this.pointSource = points);
     }
 
@@ -73,7 +83,7 @@ export class AppComponent {
     }
 
     private updatePointList() {
-        this.pointService.getPointCount().then(pointCount => this.totalSize = pointCount);
+        this.pointService.getPointCount(this.pointListId).then(pointCount => this.totalSize = pointCount);
         this.handlePage(this.createPageEvent());
     }
 
