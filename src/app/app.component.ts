@@ -24,24 +24,17 @@ export class AppComponent {
     displayedColumns: string[] = ['x', 'y'];
 
     constructor(private formBuilder: FormBuilder, private pointService: PointService) {
-        this.pointService.getPointCount().then(pointCount => this.totalSize = pointCount);
-        this.handlePage(this.createPageEvent());
-    }
-
-    private createPageEvent(): PageEvent {
-        return {
-            pageIndex: this.pageIndex,
-            previousPageIndex: 0,
-            pageSize: this.pageSize,
-            length: this.totalSize
-        };
+        this.updatePointList();
     }
 
     addPoint() {
         this.pointService.addPoint(new Point(this.newPointForm.value.x, this.newPointForm.value.y, 1000))
+        this.updatePointList();
     }
 
     handlePage(event: PageEvent) {
+        this.pageIndex = event.pageIndex
+        this.pageSize = event.pageSize
         this.pointService
             .getAllPoints(event.pageIndex, event.pageSize)
             .then(points => this.pointSource = points);
@@ -77,5 +70,18 @@ export class AppComponent {
 
     deleteList() {
 
+    }
+
+    private updatePointList() {
+        this.pointService.getPointCount().then(pointCount => this.totalSize = pointCount);
+        this.handlePage(this.createPageEvent());
+    }
+
+    private createPageEvent(): PageEvent {
+        return {
+            pageIndex: this.pageIndex,
+            pageSize: this.pageSize,
+            length: this.totalSize
+        };
     }
 }
