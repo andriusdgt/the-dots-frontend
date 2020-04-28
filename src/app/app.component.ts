@@ -10,8 +10,7 @@ import { PointService } from './service/point.service'
 
 @Component({
     selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
+    templateUrl: './app.component.html'
 })
 export class AppComponent {
     newPointForm = this.formBuilder.group({
@@ -68,7 +67,11 @@ export class AppComponent {
     addPoint() {
         this.pointService
             .addPoint(new Point(null, this.newPointForm.value.x, this.newPointForm.value.y, this.selectedPointList.id))
-            .then(() => this.updatePoints())
+            .then(() => {
+                    this.updatePoints()
+                    this.updatePointSquares()
+                }
+            )
     }
 
     handlePointPage(event: PageEvent) {
@@ -97,7 +100,11 @@ export class AppComponent {
     deletePoint() {
         this.pointService
             .deletePoint(this.selectedPointId)
-            .then(() => this.updatePoints())
+            .then(() => {
+                    this.updatePoints()
+                    this.updatePointSquares()
+                }
+            )
     }
 
     upload(event) {
