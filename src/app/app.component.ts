@@ -31,10 +31,10 @@ export class AppComponent {
     squaresPageIndex = 0
     squaresPageSize = 5
     squarePointsCount = 0
-    pointSquareSource: Array<Point>
+    pointSquareSource: Array<Array<Point>>
 
     displayedColumns: string[] = ['x', 'y']
-    private pointSquares: Array<Point>
+    private pointSquares: Array<Array<Point>>
 
     constructor(
         private formBuilder: FormBuilder,
@@ -178,7 +178,7 @@ export class AppComponent {
         this.pointListService
             .getPointListSquares(this.selectedPointList.id)
             .then(squares => {
-                this.pointSquares = flatten(squares)
+                this.pointSquares = squares
                 this.squarePointsCount = this.pointSquares.length
                 this.handlePointSquaresPage(this.createPointSquarePageEvent())
             })

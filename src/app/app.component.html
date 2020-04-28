@@ -46,7 +46,7 @@
             <div class="options">
                 <button mat-raised-button color="primary" (click)="findSquares()">Find squares</button>
 
-                <span class="square-count">Found squares: {{squarePointsCount / 4}}</span>
+                <span class="square-count">Found squares: {{squarePointsCount}}</span>
             </div>
 
             <div class="table-container">
@@ -54,12 +54,22 @@
 
                     <ng-container matColumnDef="x">
                         <mat-header-cell *matHeaderCellDef>X coordinates</mat-header-cell>
-                        <mat-cell *matCellDef="let element"> {{element.x}} </mat-cell>
+                        <mat-cell *matCellDef="let square">
+                            <div>{{square[0].x}}</div>
+                            <div>{{square[1].x}}</div>
+                            <div>{{square[2].x}}</div>
+                            <div>{{square[3].x}}</div>
+                        </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="y">
                         <mat-header-cell *matHeaderCellDef>Y coordinates</mat-header-cell>
-                        <mat-cell *matCellDef="let element"> {{element.y}} </mat-cell>
+                        <mat-cell *matCellDef="let square">
+                            <div>{{square[0].y}}</div>
+                            <div>{{square[1].y}}</div>
+                            <div>{{square[2].y}}</div>
+                            <div>{{square[3].y}}</div>
+                        </mat-cell>
                     </ng-container>
 
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
