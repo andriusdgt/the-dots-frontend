@@ -1,0 +1,8 @@
+.mat-snack-bar-container {
+  transform: translateY(40%) !important;
+  white-space: pre-wrap
+}
+
+.mat-snack-bar-container.info-snack-bar {
+  font-weight: bold;
+}

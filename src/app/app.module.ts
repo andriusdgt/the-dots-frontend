@@ -8,7 +8,7 @@ import {
     MatFormFieldModule,
     MatInputModule,
     MatPaginatorModule,
-    MatRippleModule,
+    MatRippleModule, MatSnackBarModule,
     MatTableModule
 } from '@angular/material'
 import { BrowserModule } from '@angular/platform-browser'
@@ -20,6 +20,7 @@ import { RenamePointListDialog } from './rename-point-list-dialog.component'
 import { BackendHttpService } from './service/backend-http.service'
 import { PointListService } from './service/point-list.service'
 import { PointService } from './service/point.service'
+import { SnackBar } from './snack-bar/snack-bar.service'
 
 @NgModule({
     declarations: [
@@ -42,13 +43,15 @@ import { PointService } from './service/point.service'
         MatInputModule,
         MatPaginatorModule,
         MatRippleModule,
+        MatSnackBarModule,
         MatTableModule,
         ReactiveFormsModule
     ],
     providers: [
         BackendHttpService,
         PointService,
-        PointListService
+        PointListService,
+        SnackBar
     ],
     bootstrap: [AppComponent]
 })

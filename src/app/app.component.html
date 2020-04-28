@@ -100,7 +100,7 @@
     <div class="point-list-manager">
         <span>Point list</span>
         <div class="options">
-            <input hidden type="file" #uploader (change)="upload($event)"/>
+            <input hidden type="file" #uploader (change)="upload(uploader.files[0]); uploader.value = ''"/>
             <button mat-raised-button color="primary" (click)="uploader.click()">Upload</button>
             <button mat-raised-button color="primary" (click)="download()">Download</button>
             <button mat-raised-button color="warn" (click)="clearPoints()">Clear points</button>

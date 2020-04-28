@@ -28,8 +28,8 @@ export class PointListService {
             .then(pointListResponse => this.saveToDisk(pointListResponse))
     }
 
-    uploadPointList(textFile: File, listId: string): Promise<void> {
-        return this.backendHttpService.postBlob(POINT_LIST_PATH + `/list-id/${listId}`, textFile)
+    uploadPointList(textFile: File, listId: string): Promise<string[]> {
+        return this.backendHttpService.postBlob<string[]>(POINT_LIST_PATH + `/list-id/${listId}`, textFile)
     }
 
     getPointLists(): Promise<Array<PointList>> {

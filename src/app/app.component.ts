@@ -7,6 +7,7 @@ import { PointList } from './point-list'
 import { RenamePointListDialog } from './rename-point-list-dialog.component'
 import { PointListService } from './service/point-list.service'
 import { PointService } from './service/point.service'
+import { SnackBar } from './snack-bar/snack-bar.service'
 
 @Component({
     selector: 'app-root',
@@ -39,7 +40,8 @@ export class AppComponent {
         private formBuilder: FormBuilder,
         private dialog: MatDialog,
         private pointService: PointService,
-        private pointListService: PointListService
+        private pointListService: PointListService,
+        private snackBar: SnackBar
     ) {
         this.setPointLists(this.setInitPoints())
     }
@@ -107,12 +109,14 @@ export class AppComponent {
             )
     }
 
-    upload(event) {
+    upload(file: File) {
         this.pointListService
-            .uploadPointList(event.target.files[0], this.selectedPointList.id)
-            .then(() => {
+            .uploadPointList(file, this.selectedPointList.id)
+            .then(warnings => {
                 this.setPointLists()
                 this.updatePoints()
+                if (warnings.length > 0)
+                    this.snackBar.displayInfo(warnings.join('\n'))
             })
     }
 

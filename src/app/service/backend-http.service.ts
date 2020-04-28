@@ -47,7 +47,7 @@ export class BackendHttpService {
 
     }
 
-    postBlob(partPath: string, file: File): Promise<void> {
+    postBlob<O>(partPath: string, file: File): Promise<O> {
 
         let body = new FormData();
         body.append("file", file)
@@ -57,7 +57,7 @@ export class BackendHttpService {
                 .http
                 .post(environment.backendUrl + partPath, body)
                 .toPromise()
-                .then(() => resolve())
+                .then(response => resolve(response as O))
                 .catch(error => {
                     reject(error)
                 })
