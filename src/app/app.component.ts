@@ -21,7 +21,7 @@ export class AppComponent {
 
     pointPageIndex = 0
     pointPageSize = 5
-    pointCount = 5
+    pointCount = 0
     pointSource: Array<Point>
     selectedPointId: string
 
@@ -30,7 +30,7 @@ export class AppComponent {
 
     squaresPageIndex = 0
     squaresPageSize = 5
-    squarePointsCount = 5
+    squarePointsCount = 0
     pointSquareSource: Array<Point>
 
     displayedColumns: string[] = ['x', 'y']
