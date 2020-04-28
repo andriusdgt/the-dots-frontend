@@ -14,11 +14,9 @@ import { PointService } from './service/point.service'
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-    title = 'The Dots'
-
     newPointForm = this.formBuilder.group({
-        x: ['', [Validators.required, Validators.min(-10000), Validators.max(10000)]],
-        y: ['', [Validators.required, Validators.min(-10000), Validators.max(10000)]]
+        x: ['', [Validators.required, Validators.min(-5000), Validators.max(5000)]],
+        y: ['', [Validators.required, Validators.min(-5000), Validators.max(5000)]]
     })
 
     pointPageIndex = 0
@@ -68,8 +66,9 @@ export class AppComponent {
     }
 
     addPoint() {
-        this.pointService.addPoint(new Point(null, this.newPointForm.value.x, this.newPointForm.value.y, this.selectedPointList.id))
-        this.updatePoints()
+        this.pointService
+            .addPoint(new Point(null, this.newPointForm.value.x, this.newPointForm.value.y, this.selectedPointList.id))
+            .then(() => this.updatePoints())
     }
 
     handlePointPage(event: PageEvent) {
@@ -96,8 +95,9 @@ export class AppComponent {
     }
 
     deletePoint() {
-        this.pointService.deletePoint(this.selectedPointId)
-        this.updatePoints()
+        this.pointService
+            .deletePoint(this.selectedPointId)
+            .then(() => this.updatePoints())
     }
 
     upload(event) {
@@ -114,8 +114,9 @@ export class AppComponent {
     }
 
     clearPoints() {
-        this.pointService.deletePoints(this.selectedPointList.id)
-        this.updatePoints()
+        this.pointService
+            .deletePoints(this.selectedPointList.id)
+            .then(() => this.updatePoints())
     }
 
     findSquares() {
@@ -123,8 +124,9 @@ export class AppComponent {
     }
 
     createList() {
-        this.pointListService.createPointList().then(
-            () => this.setPointLists()
+        this.pointListService
+            .createPointList()
+            .then(() => this.setPointLists()
         )
     }
 

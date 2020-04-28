@@ -10,16 +10,16 @@ export class PointService {
     constructor(private backendHttpService: BackendHttpService) {
     }
 
-    addPoint(point: Point){
-        this.backendHttpService.put<Point>(POINT_PATH, point)
+    addPoint(point: Point): Promise<void>{
+        return this.backendHttpService.put<void>(POINT_PATH, point)
     }
 
-    deletePoint(id: string){
-        this.backendHttpService.delete<void>(POINT_PATH + '/' + id)
+    deletePoint(id: string): Promise<void>{
+        return this.backendHttpService.delete<void>(POINT_PATH + '/' + id)
     }
 
-    deletePoints(listId: string){
-        this.backendHttpService.delete<void>(POINT_PATH + `/list-id/${listId}`)
+    deletePoints(listId: string): Promise<void>{
+        return this.backendHttpService.delete<void>(POINT_PATH + `/list-id/${listId}`)
     }
 
     getAllPoints(listId: string, pageIndex: number, pageSize: number): Promise<Array<Point>> {
