@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core'
 import { FileDownloader } from '../file-downloader/file-downloader'
 import { Point } from '../point'
 import { PointList } from '../point-list'
+import { Warning } from '../warning';
 import { BackendHttpService } from './backend-http.service'
 import { POINT_PATH } from './point.service'
 
@@ -28,8 +29,8 @@ export class PointListService {
             .then(pointListResponse => this.saveToDisk(pointListResponse))
     }
 
-    uploadPointList(textFile: File, listId: string): Promise<string[]> {
-        return this.backendHttpService.postBlob<string[]>(POINT_LIST_PATH + `/list-id/${listId}`, textFile)
+    uploadPointList(textFile: File, listId: string): Promise<Array<Warning>> {
+        return this.backendHttpService.postBlob<Array<Warning>>(POINT_LIST_PATH + `/list-id/${listId}`, textFile)
     }
 
     getPointLists(): Promise<Array<PointList>> {

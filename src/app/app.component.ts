@@ -1,4 +1,3 @@
-import { flatten } from '@angular/compiler'
 import { Component } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
 import { MatDialog, PageEvent } from '@angular/material'
@@ -116,7 +115,7 @@ export class AppComponent {
                 this.setPointLists()
                 this.updatePoints()
                 if (warnings.length > 0)
-                    this.snackBar.displayInfo(warnings.join('\n'))
+                    this.snackBar.displayInfo(warnings.reduce((acc, warning) => acc + warning.message + '\n' , ''))
             })
     }
 
