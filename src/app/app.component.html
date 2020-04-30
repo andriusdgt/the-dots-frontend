@@ -46,29 +46,29 @@
             <div class="options">
                 <button mat-raised-button color="primary" (click)="findSquares()">Find squares</button>
 
-                <span class="square-count">Found squares: {{squarePointsCount}}</span>
+                <span class="square-count">Found squares: {{squaresCount}}</span>
             </div>
 
             <div class="table-container">
-                <table mat-table [dataSource]="pointSquareSource">
+                <table mat-table [dataSource]="squaresSource">
 
                     <ng-container matColumnDef="x">
                         <mat-header-cell *matHeaderCellDef>X coordinates</mat-header-cell>
                         <mat-cell *matCellDef="let square">
-                            <div>{{square[0].x}}</div>
-                            <div>{{square[1].x}}</div>
-                            <div>{{square[2].x}}</div>
-                            <div>{{square[3].x}}</div>
+                            <div>{{square.vertices["BOTTOM_LEFT"].x}}</div>
+                            <div>{{square.vertices["UPPER_LEFT"].x}}</div>
+                            <div>{{square.vertices["UPPER_RIGHT"].x}}</div>
+                            <div>{{square.vertices["BOTTOM_RIGHT"].x}}</div>
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="y">
                         <mat-header-cell *matHeaderCellDef>Y coordinates</mat-header-cell>
                         <mat-cell *matCellDef="let square">
-                            <div>{{square[0].y}}</div>
-                            <div>{{square[1].y}}</div>
-                            <div>{{square[2].y}}</div>
-                            <div>{{square[3].y}}</div>
+                            <div>{{square.vertices["BOTTOM_LEFT"].y}}</div>
+                            <div>{{square.vertices["UPPER_LEFT"].y}}</div>
+                            <div>{{square.vertices["UPPER_RIGHT"].y}}</div>
+                            <div>{{square.vertices["BOTTOM_RIGHT"].y}}</div>
                         </mat-cell>
                     </ng-container>
 
@@ -78,7 +78,7 @@
             </div>
             <mat-paginator [pageSize]="squaresPageSize" [pageIndex]="squaresPageIndex"
                            [pageSizeOptions]="[5, 10, 20, 50]"
-                           [showFirstLastButtons]="true" [length]="squarePointsCount"
+                           [showFirstLastButtons]="true" [length]="squaresCount"
                            (page)="handlePointSquaresPage($event)">
             </mat-paginator>
         </div>

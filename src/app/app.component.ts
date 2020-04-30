@@ -7,6 +7,7 @@ import { RenamePointListDialog } from './rename-point-list-dialog.component'
 import { PointListService } from './service/point-list.service'
 import { PointService } from './service/point.service'
 import { SnackBar } from './snack-bar/snack-bar.service'
+import { Square } from './square';
 
 @Component({
     selector: 'app-root',
@@ -29,11 +30,11 @@ export class AppComponent {
 
     squaresPageIndex = 0
     squaresPageSize = 5
-    squarePointsCount = 0
-    pointSquareSource: Array<Array<Point>>
+    squaresCount = 0
+    squaresSource: Array<Square>
 
     displayedColumns: string[] = ['x', 'y']
-    private pointSquares: Array<Array<Point>>
+    private squares: Array<Square>
 
     constructor(
         private formBuilder: FormBuilder,
@@ -86,7 +87,7 @@ export class AppComponent {
     handlePointSquaresPage(event: PageEvent) {
         this.squaresPageIndex = event.pageIndex
         this.squaresPageSize = event.pageSize
-        this.pointSquareSource = this.pointSquares.slice(event.pageIndex * event.pageSize, (event.pageIndex + 1) * event.pageSize)
+        this.squaresSource = this.squares.slice(event.pageIndex * event.pageSize, (event.pageIndex + 1) * event.pageSize)
     }
 
     selectPoint(point: Point) {
@@ -177,8 +178,8 @@ export class AppComponent {
         this.pointListService
             .getPointListSquares(this.selectedPointList.id)
             .then(squares => {
-                this.pointSquares = squares
-                this.squarePointsCount = this.pointSquares.length
+                this.squares = squares
+                this.squaresCount = this.squares.length
                 this.handlePointSquaresPage(this.createPointSquarePageEvent())
             })
     }
@@ -195,7 +196,7 @@ export class AppComponent {
         return {
             pageIndex: this.squaresPageIndex,
             pageSize: this.squaresPageSize,
-            length: this.squarePointsCount
+            length: this.squaresCount
         }
     }
 

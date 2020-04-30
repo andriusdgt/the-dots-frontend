@@ -1,8 +1,8 @@
 import { HttpResponse } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { FileDownloader } from '../file-downloader/file-downloader'
-import { Point } from '../point'
 import { PointList } from '../point-list'
+import { Square } from '../square';
 import { Warning } from '../warning';
 import { BackendHttpService } from './backend-http.service'
 import { POINT_PATH } from './point.service'
@@ -37,8 +37,8 @@ export class PointListService {
         return this.backendHttpService.get<Array<PointList>>(POINT_LIST_PATH)
     }
 
-    getPointListSquares(listId: string): Promise<Array<Array<Point>>> {
-        return this.backendHttpService.get<Array<Array<Point>>>(POINT_LIST_PATH + `/list-id/${listId}/squares`)
+    getPointListSquares(listId: string): Promise<Array<Square>> {
+        return this.backendHttpService.get<Array<Square>>(POINT_LIST_PATH + `/list-id/${listId}/squares`)
     }
 
     deletePointList(listId: string): Promise<void> {
