@@ -32,6 +32,15 @@ speed-measure-plugin.json
 !.vscode/extensions.json
 .history/*
 
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
 # misc
 /.sass-cache
 /connect.lock
@@ -41,7 +50,3 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
-
-# System Files
-.DS_Store
-Thumbs.db
