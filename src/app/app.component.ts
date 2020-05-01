@@ -1,13 +1,14 @@
 import { Component } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
-import { MatDialog, PageEvent } from '@angular/material'
+import { MatDialog, PageEvent, Sort } from '@angular/material'
+import { SortDirection } from '@angular/material/sort'
 import { Point } from './point'
 import { PointList } from './point-list'
 import { RenamePointListDialog } from './rename-point-list-dialog.component'
 import { PointListService } from './service/point-list.service'
 import { PointService } from './service/point.service'
 import { SnackBar } from './snack-bar/snack-bar.service'
-import { Square } from './square';
+import { Square } from './square'
 
 @Component({
     selector: 'app-root',
@@ -34,6 +35,7 @@ export class AppComponent {
     squaresSource: Array<Square>
 
     displayedColumns: string[] = ['x', 'y']
+    private pointSortDirection: SortDirection = ''
     private squares: Array<Square>
 
     constructor(
@@ -79,15 +81,25 @@ export class AppComponent {
     handlePointPage(event: PageEvent) {
         this.pointPageIndex = event.pageIndex
         this.pointPageSize = event.pageSize
-        this.pointService
-            .getAllPoints(this.selectedPointList.id, event.pageIndex, event.pageSize)
-            .then(points => this.pointSource = points)
+        if (this.pointSortDirection === '')
+            this.pointService
+                .getPoints(this.selectedPointList.id, event.pageIndex, event.pageSize)
+                .then(points => this.pointSource = points)
+        else
+            this.pointService
+                .getSortedPoints(this.selectedPointList.id, this.pointPageIndex, this.pointPageSize, this.pointSortDirection)
+                .then(points => this.pointSource = points)
     }
 
     handlePointSquaresPage(event: PageEvent) {
         this.squaresPageIndex = event.pageIndex
         this.squaresPageSize = event.pageSize
         this.squaresSource = this.squares.slice(event.pageIndex * event.pageSize, (event.pageIndex + 1) * event.pageSize)
+    }
+
+    sortPoints(sort: Sort) {
+        this.pointSortDirection = sort.direction
+        this.updatePoints()
     }
 
     selectPoint(point: Point) {
@@ -116,7 +128,7 @@ export class AppComponent {
                 this.setPointLists()
                 this.updatePoints()
                 if (warnings.length > 0)
-                    this.snackBar.displayInfo(warnings.reduce((acc, warning) => acc + warning.message + '\n' , ''))
+                    this.snackBar.displayInfo(warnings.reduce((acc, warning) => acc + warning.message + '\n', ''))
             })
     }
 
@@ -137,8 +149,7 @@ export class AppComponent {
     createList() {
         this.pointListService
             .createPointList()
-            .then(() => this.setPointLists()
-        )
+            .then(() => this.setPointLists())
     }
 
     renameList() {

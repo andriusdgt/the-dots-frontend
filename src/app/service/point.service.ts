@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core'
+import { SortDirection } from '@angular/material/sort'
 import { Point } from '../point';
 import { BackendHttpService } from './backend-http.service';
 
@@ -22,8 +23,12 @@ export class PointService {
         return this.backendHttpService.delete<void>(POINT_PATH + `/list-id/${listId}`)
     }
 
-    getAllPoints(listId: string, pageIndex: number, pageSize: number): Promise<Array<Point>> {
+    getPoints(listId: string, pageIndex: number, pageSize: number): Promise<Array<Point>> {
         return this.backendHttpService.get<Array<Point>>(POINT_PATH + `/list-id/${listId}/page-index/${pageIndex}/page-size/${pageSize}`)
+    }
+
+    getSortedPoints(listId: string, pageIndex: number, pageSize: number, sortDirection: SortDirection): Promise<Array<Point>> {
+        return this.backendHttpService.get<Array<Point>>(POINT_PATH + `/list-id/${listId}/page-index/${pageIndex}/page-size/${pageSize}/${sortDirection}`)
     }
 
     getPointCount(listId: string): Promise<number> {

@@ -86,10 +86,10 @@
 
     <div class="point-viewer">
         <div class="table-container">
-            <table mat-table [dataSource]="pointSource">
+            <table mat-table matSort [dataSource]="pointSource" (matSortChange)="sortPoints($event)" >
 
                 <ng-container matColumnDef="x">
-                    <mat-header-cell *matHeaderCellDef>X coordinates</mat-header-cell>
+                    <mat-header-cell mat-sort-header *matHeaderCellDef>X coordinates</mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{element.x}} </mat-cell>
                 </ng-container>
 
