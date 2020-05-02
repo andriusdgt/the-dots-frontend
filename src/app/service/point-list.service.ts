@@ -38,7 +38,7 @@ export class PointListService {
     }
 
     getPointListSquares(listId: string): Promise<Array<Square>> {
-        return this.backendHttpService.get<Array<Square>>(POINT_LIST_PATH + `/list-id/${listId}/squares`)
+        return this.backendHttpService.get<Array<Square>>(POINT_LIST_PATH + `/square/list-id/${listId}`)
     }
 
     deletePointList(listId: string): Promise<void> {
