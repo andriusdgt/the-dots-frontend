@@ -16,7 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { FileDownloaderModule } from './file-downloader/file-downloader.module';
-import { RenamePointListDialog } from './rename-point-list-dialog.component';
+import { RenamePointListDialog } from './rename-point-list/rename-point-list-dialog.component';
 import { BackendHttpService } from './service/backend-http.service';
 import { PointListService } from './service/point-list.service';
 import { PointService } from './service/point.service';
